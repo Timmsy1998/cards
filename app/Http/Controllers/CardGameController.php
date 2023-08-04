@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CardGame;
 
 class CardGameController extends Controller
 {
@@ -11,31 +12,55 @@ class CardGameController extends Controller
 
     public function index()
     {
-        // Return the welcome view
-        return view('welcome', ['players' => []]);
+        $cardGameId = session('card_game_id');
+
+        if ($cardGameId) {
+            $cardGame = CardGame::findOrFail($cardGameId);
+            $deckData = json_decode($cardGame->deck, true);
+
+            // Divide the deck into 4 equal parts for each player
+            $players = [];
+            $chunkSize = count($deckData) / 4;
+            for ($i = 1; $i <= 4; $i++) {
+                $players[$i] = array_splice($deckData, 0, $chunkSize);
+            }
+        } else {
+            $players = [];
+        }
+
+        // Return the welcome view with the dealt cards for each player
+        return view('welcome', ['players' => $players]);
     }
 
     public function shuffle()
     {
         $deck = $this->getShuffledDeck();
-        // Store the shuffled deck in the session or database if you want to preserve it
-        // For simplicity, we'll just pass the deck directly to the view in this example
-        return view('welcome', ['players' => [], 'deck' => $deck]);
+
+        // Create a new CardGame record in the card_games table to store the shuffled deck
+        $cardGame = CardGame::create([
+            'deck' => json_encode($deck),
+        ]);
+
+        // Redirect to the welcome view with the card_game_id
+        return redirect('/')->with('card_game_id', $cardGame->id);
     }
 
-    public function deal(Request $request)
+    public function deal()
     {
-        $deck = $request->session()->get('deck');
-        if (!$deck) {
-            // If the deck is not shuffled, redirect to the homepage or shuffle it again
-            return redirect('/');
-        }
+        // Get the card_game_id from the session
+        $cardGameId = session('card_game_id');
+
+        // Retrieve the card game from the database using the CardGame model
+        $cardGame = CardGame::findOrFail($cardGameId);
+
+        // Retrieve the deck data from the card game model
+        $deckData = json_decode($cardGame->deck, true);
 
         // Divide the deck into 4 equal parts for each player
         $players = [];
-        $chunkSize = count($deck) / 4;
+        $chunkSize = count($deckData) / 4;
         for ($i = 1; $i <= 4; $i++) {
-            $players[$i] = array_splice($deck, 0, $chunkSize);
+            $players[$i] = array_splice($deckData, 0, $chunkSize);
         }
 
         // Return the welcome view with the dealt cards for each player
