@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CardGameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CardGameController::class, 'index']);
+Route::post('/shuffle', [CardGameController::class, 'shuffle'])->name('shuffle');
+Route::post('/deal', [CardGameController::class, 'deal'])->name('deal');
