@@ -75,7 +75,18 @@ class CardGameController extends Controller
                 $deck[] = ['suit' => $suit, 'value' => $value];
             }
         }
-        shuffle($deck);
+
+        // Fisher-Yates shuffle algorithm
+        // The Fisher-Yates shuffle algorithm has a time complexity of O(n), making it an efficient method for shuffling arrays.
+        $totalCards = count($deck);
+        for ($i = $totalCards - 1; $i > 0; $i--) {
+            $j = random_int(0, $i);
+            if ($i !== $j) {
+                // Swap the cards at positions $i and $j
+                [$deck[$i], $deck[$j]] = [$deck[$j], $deck[$i]];
+            }
+        }
+
         return $deck;
     }
 }
