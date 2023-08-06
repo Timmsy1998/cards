@@ -42,8 +42,5 @@ Then Migrate the Database
     
 ## Screenshots
 
-<img src="https://i.imgur.com/ZUENNu8.png" alt="Login Page" width="468" height="300">
-<img src="https://i.imgur.com/X7oox5E.png" alt="Registration Page" width="468" height="300">
-<img src="https://i.imgur.com/VnRYjyI.png" alt="User Dashboard" width="468" height="300">
-<img src="https://i.imgur.com/RCIaTZ8.png" alt="Articles 1" width="468" height="300">
-<img src="https://i.imgur.com/8FARTo3.png" alt="Articles 2" width="468" height="300">
+<img src="https://i.imgur.com/QPB79fM.png" alt="Home Screen" width="468" height="300">
+<img src="https://i.imgur.com/PPjN3ws.png" alt="Cards Dealt and Shuffled" width="468" height="300">
